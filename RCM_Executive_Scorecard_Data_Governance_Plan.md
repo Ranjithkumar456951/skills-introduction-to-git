@@ -1,83 +1,101 @@
-# Data Governance Plan — RCM Operational Analytics: Executive Scorecard
+<p align="center"><img src="https://learn.microsoft.com/en-us/fabric/media/fabric-icon.png" alt="Fabric" width="72" />&nbsp;&nbsp;<img src="https://learn.microsoft.com/en-us/purview/media/purview-logo.png" alt="Purview" width="72" /></p>
+
+# **Data Governance Plan — RCM Operational Analytics: Executive Scorecard**
+
+## Table of Contents
+- [Executive Summary](#executive-summary)
+- [Objectives](#objectives)
+- [Scope](#scope)
+- [Roles & Responsibilities](#roles--responsibilities)
+- [Key Policies](#key-policies-draft)
+- [Implementation Approach](#implementation-approach)
+- [Deliverables](#deliverables)
+- [Milestones & Timeline](#milestones--timeline-example)
+- [Acceptance Criteria](#acceptance-criteria)
+- [Communications & Meetings](#communications--meetings)
+- [Risks & Mitigations](#risks--mitigations)
+- [Next Steps](#next-steps-immediate)
+
+---
 
 ## Executive Summary
-This document defines the data governance framework for the RCM Operational Analytics - Executive Scorecard dashboard. It describes scope, objectives, roles, policies, implementation approach, milestones, and acceptance criteria so the team can align on governance, compliance, and operational responsibilities.
+This plan sets the governance framework for the RCM Operational Analytics Executive Scorecard. It ensures data quality, lineage, discoverability, access controls, and CI/CD enforcement using Microsoft Fabric and Microsoft Purview (catalog).
 
 ## Objectives
 - Ensure data quality, lineage, and discoverability for dashboard artifacts.
 - Define ownership and stewardship for code, datasets, and reports.
-- Enforce least-privilege access and policy checks in Microsoft Fabric and Purview.
+- Enforce least-privilege access and policy checks in Fabric and Purview.
 - Integrate governance into CI/CD to prevent drift and ensure auditability.
 
 ## Scope
-Included:
-- Repository code and configuration for the Executive Scorecard
-- Power BI reports / report definitions (if stored in repo)
-- Notebooks, pipelines, transformation scripts used to build datasets
-- Deployment manifests / CI-CD pipelines that publish artifacts
-Excluded (unless otherwise agreed):
-- Downstream systems not referenced by the repo
-- Third-party data sources outside managed contracts
+**Included**: Repository code, report definitions, notebooks, pipelines, transformation scripts, deployment manifests, and CI/CD artifacts related to the Executive Scorecard.
+
+**Excluded (unless agreed)**: Downstream systems not referenced by the repo; external third-party data sources beyond contract scope.
 
 ## Roles & Responsibilities
-- Project Sponsor: Stakeholder-owner accountable for outcomes.
-- Data Steward: Responsible for dataset classification, metadata, and approvals.
-- Code Owner / Repo Maintainer: Responsible for code reviews and CI policy enforcement.
-- Platform Admin: Configure Fabric workspaces, Purview integration, RBAC, and monitoring.
-- Security/Compliance: Review policies and audit results periodically.
+- **Project Sponsor** — accountable for outcomes.
+- **Data Steward** — dataset classification, metadata, approvals.
+- **Code Owner / Repo Maintainer** — code reviews, CI policy enforcement.
+- **Platform Admin** — configure Fabric workspaces, RBAC, Purview integration.
+- **Security / Compliance** — policy review and audits.
 
 ## Key Policies (Draft)
-- Ownership: Every dataset, report, and pipeline must have an assigned owner and a steward.
-- Classification & Labels: Apply sensitivity and business classification tags (e.g., Public, Internal, Confidential, PHI) to datasets and reports.
-- Access Control: Enforce RBAC in Fabric workspaces; use groups for role assignments; approve access via steward workflows.
-- Lineage & Cataloging: Register datasets, notebooks, and reports in Purview; capture automated lineage from pipelines and reporting assets.
-- CI/CD Checks: Block merges that fail policy checks (missing labels, missing owner, failing unit-tests, or missing lineage metadata).
-- Retention & Archival: Define retention windows and archival procedures per dataset classification.
+- **Ownership**: Each dataset/report/pipeline needs an owner and a steward recorded in GOVERNANCE_METADATA.md.
+- **Classification & Labels**: Use sensitivity tags (Public, Internal, Confidential, PHI) and business domains.
+- **Access Control**: RBAC in Fabric workspaces; use AD groups; approvals via steward workflows.
+- **Lineage & Cataloging**: Register assets in Purview; capture pipeline and report lineage.
+- **CI/CD Checks**: Block merges missing owner/classification/broken tests or lacking Purview registration.
+- **Retention & Archival**: Define per-classification data retention rules.
 
 ## Implementation Approach
-1. Inventory: Identify all artifacts in the repo and map which Fabric workspace assets they relate to.
-2. Classification: Assign initial classifications and owners to artifacts; document in a metadata file (e.g., GOVERNANCE_METADATA.md) and register key datasets in Purview.
-3. Policy Definition: Finalize classification labels, approval flows, and CI gating rules.
-4. Automation: Integrate metadata checks into CI (pre-merge), enable automated lineage capture, and configure workspace RBAC templates.
-5. Pilot: Apply governance to a small set of critical artifacts (e.g., top 3 dashboards/datasets), validate, and refine.
-6. Rollout: Expand to remaining assets, provide training, and hand over operational runbook.
+1. **Inventory** — scan repo and Fabric workspace to list artifacts.
+2. **Classification** — assign owners and labels; record in GOVERNANCE_METADATA.md.
+3. **Policy Definition** — finalize labels, approval flows, and CI gating rules.
+4. **Automation** — add CI pre-merge checks, automated Purview registration scripts, and workspace RBAC templates.
+5. **Pilot** — apply to a small set (3) of critical artifacts; validate.
+6. **Rollout** — scale to remaining assets; provide training and runbook.
 
 ## Deliverables
-- Governance policy document (this file)
+- This governance policy document (finalized)
 - GOVERNANCE_METADATA.md mapping artifacts → owners → classification
-- CI policy checks (scripts/workflow) blocking policy violations
+- CI policy checks (scripts/workflow)
 - Purview registrations and lineage for pilot artifacts
-- Runbook: owner contacts, onboarding steps, and audit checklist
+- Operational runbook and training materials
 
 ## Milestones & Timeline (Example)
-- Week 0: Kickoff, confirm scope and stakeholders
-- Week 1: Inventory and assign owners (pilot artifacts)
-- Week 2: Draft policies and CI check prototypes
-- Week 3: Implement pilot automation and register lineage in Purview
-- Week 4: Pilot validation, adjustments, and team training
-- Week 5+: Rollout across remaining artifacts
+- Week 0: Kickoff and stakeholder sign-off
+- Week 1: Inventory and pilot artifact selection
+- Week 2: Draft policies and CI prototypes
+- Week 3: Implement pilot automation and Purview registration
+- Week 4: Pilot validation and training
+- Week 5+: Rollout
 
 ## Acceptance Criteria
-- Pilot artifacts registered in Purview with lineage captured.
-- All pilot artifacts have assigned owners and classifications recorded.
-- CI pipeline blocks merges that violate core governance policies.
-- RBAC configured in workspaces to enforce least-privilege for pilot artifacts.
+- Pilot assets registered in Purview with lineage
+- Owners and classifications recorded for pilot assets
+- CI blocks merges that violate core governance policies
+- RBAC enforced in workspaces for pilot assets
 
 ## Communications & Meetings
-- Weekly 30-min sync during pilot phase: progress, blockers, actions.
-- Ad-hoc review sessions for policy sign-off with Security/Compliance.
-- Slack/Teams channel for day-to-day coordination and escalation.
+- Weekly 30-min pilot syncs
+- Policy sign-off meetings with Security/Compliance
+- Slack/Teams channel for coordination
 
 ## Risks & Mitigations
-- Risk: Incomplete inventory misses artifacts. Mitigation: cross-check with Fabric workspace and run automated scans of repo.
-- Risk: Resistance to new CI gating. Mitigation: provide clear rollback and exception workflows; start with soft enforcement (warnings) then hard block.
+- Incomplete inventory → cross-check with Fabric workspace and automated scans
+- Resistance to CI gating → phased enforcement (warnings → hard blocks); exception workflows
 
 ## Next Steps (Immediate)
-1. Review this document with stakeholders and confirm scope.
-2. Approve pilot artifact list (3 artifacts recommended).
-3. Assign owners and stewards for pilot artifacts.
-4. Start the inventory and Purview registration for pilot.
+1. Review and approve this document
+2. Confirm pilot artifact list (3 recommended)
+3. Assign owners/stewards for pilot
+4. Start inventory and Purview registration for pilot
 
 ---
-Document prepared by: Project Team
+
+### Useful links
+- Microsoft Fabric docs: https://learn.microsoft.com/en-us/fabric/
+- Microsoft Purview docs: https://learn.microsoft.com/en-us/purview/
+
+*Prepared by: Project Team*
 
